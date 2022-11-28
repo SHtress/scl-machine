@@ -70,8 +70,12 @@ std::vector<ScTemplateParams> TemplateManager::createTemplateParams(
     else
     {
       std::set<ScAddr, AddrComparator> addresses = replacementsMultimap[varName];
-      size_t amountOfAddressesForVar = addresses.size();
+      int amountOfAddressesForVar = addresses.size();
       size_t oldParamsSize = templateParamsVector.size();
+
+      if (amountOfAddressesForVar - 1 < 0)
+        amountOfAddressesForVar = 1;
+
       size_t amountOfNewElements = oldParamsSize * (amountOfAddressesForVar - 1);
       templateParamsVector.reserve(amountOfNewElements);
       size_t beginOfCopy = 0;
