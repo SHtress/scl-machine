@@ -34,17 +34,7 @@ ScAddr DirectInferenceManager::applyInference(
   ScAddrVector argumentVector = utils::IteratorUtils::getAllWithType(ms_context, inputStructure, ScType::Node);
   for (ScAddr const & argument : argumentVector)
   {
-<<<<<<< HEAD
     templateSearcher->addParam(argument);
-=======
-    ScIterator3Ptr argumentIterator =
-        ms_context->Iterator3(inputStructure, ScType::EdgeAccessConstPosPerm, ScType::Node);
-    while (argumentIterator->Next())
-      templateSearcher->addParam(argumentIterator->Get(2));
-    argumentVector = utils::IteratorUtils::getAllWithType(ms_context, inputStructure, ScType::Node);
-    if (argumentVector.empty())
-      return this->solutionTreeGenerator->createSolution(false);
->>>>>>> effbf97 ([dia] Fix loop in applying rules)
   }
   templateSearcher->setInputStructure(inputStructure);
 
@@ -96,7 +86,7 @@ ScAddr DirectInferenceManager::applyInference(
         }
         else
         {
-          // ContainersUtils::addToQueue(checkedFormulas, uncheckedFormulas);
+          ContainersUtils::addToQueue(checkedFormulas, uncheckedFormulas);
           formulasQueueIndex = 0;
           checkedFormulas.clear();
         }
@@ -178,33 +168,18 @@ bool DirectInferenceManager::isTargetAchieved(ScAddr const & targetStructure, Sc
 {
   std::vector<ScTemplateParams> const templateParamsVector =
       templateManager->createTemplateParams(targetStructure, argumentVector);
-<<<<<<< HEAD
   return std::any_of(
       templateParamsVector.cbegin(),
       templateParamsVector.cend(),
       [this, &targetStructure](ScTemplateParams const & templateParams) {
         return !templateSearcher->searchTemplate(targetStructure, templateParams).empty();
       });
-=======
-  for (ScTemplateParams const & templateParams : templateParamsVector)
-  {
-    auto searchResult = templateSearcher->searchTemplate(targetStructure, templateParams);
-    if (!searchResult.empty())
-      return true;
-  }
-  return false;
->>>>>>> effbf97 ([dia] Fix loop in applying rules)
 }
 
 void DirectInferenceManager::clearSatisfiabilityInformation(ScAddr const & formula, ScAddr const & inputStructure)
 {
-<<<<<<< HEAD
   ScIterator5Ptr satisfiabilityIterator = ms_context->Iterator5(
       formula, ScType::EdgeDCommon, inputStructure, ScType::EdgeAccess, InferenceKeynodes::nrel_satisfiable_formula);
-=======
-  ScIterator5Ptr iterator5Ptr = ms_context->Iterator5(
-      formula, ScType::EdgeDCommon, model, ScType::EdgeAccess, InferenceKeynodes::nrel_satisfiable_formula);
->>>>>>> effbf97 ([dia] Fix loop in applying rules)
 
   while (satisfiabilityIterator->Next())
     ms_context->EraseElement(satisfiabilityIterator->Get(1));
@@ -212,11 +187,7 @@ void DirectInferenceManager::clearSatisfiabilityInformation(ScAddr const & formu
 
 void DirectInferenceManager::addSatisfiabilityInformation(
     ScAddr const & formula,
-<<<<<<< HEAD
     ScAddr const & inputStructure,
-=======
-    ScAddr const & model,
->>>>>>> effbf97 ([dia] Fix loop in applying rules)
     bool isSatisfiable)
 {
   clearSatisfiabilityInformation(formula, inputStructure);
